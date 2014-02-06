@@ -14,13 +14,7 @@ module HasOrder
 
     before_save :set_default_position, if: :set_default_position?
 
-    if list_scope = options[:scope]
-      scope :list_scope, ->(instance) do
-        where(Hash[Array(list_scope).map { |s| [ s, instance[s] ] }])
-      end
-    else
-      scope :list_scope, ->(instance){ self }
-    end
+    define_list_scope(options[:scope])
   end
 
   module ClassMethods
@@ -124,6 +118,19 @@ module HasOrder
 
     def set_default_position?
       position.nil?
+    end
+  end
+
+  protected
+
+  def define_list_scope list_scope
+    scope :list_scope, case list_scope
+    when nil
+      self
+    when Proc
+      list_scope
+    else
+      ->(model) { where(Hash[Array(list_scope).map{ |s| [ s, model[s] ] }]) }
     end
   end
 end
