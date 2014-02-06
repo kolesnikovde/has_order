@@ -71,6 +71,17 @@ module HasOrder
       higher.ordered.first
     end
 
+    def move_to pos
+      ActiveRecord::Base.transaction do
+        if node = list_scope.at(pos).first
+          node.and_higher.shift!
+        end
+
+        self.position = pos
+        save!
+      end
+    end
+
     def move_before node
       node_pos = node.position
       pos = node_pos > 0 ? node_pos - 1 : node_pos
@@ -81,7 +92,8 @@ module HasOrder
           node.and_higher.shift!
         end
 
-        move_to(pos)
+        self.position = pos
+        save!
       end
     end
 
@@ -94,7 +106,8 @@ module HasOrder
           node.higher.shift!
         end
 
-        move_to(pos)
+        self.position = pos
+        save!
       end
     end
 
@@ -102,11 +115,6 @@ module HasOrder
 
     def list_scope
       self.class.list_scope(self)
-    end
-
-    def move_to pos
-      self.position = pos
-      self.save!
     end
 
     def where_position cmp

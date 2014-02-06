@@ -110,6 +110,21 @@ describe HasOrder do
     its(:next) { should be_nil }
   end
 
+  describe '#move_to' do
+    it 'shifts item and higher items when the position is occupied' do
+      @foo.update_attribute(:position, 1)
+      @bar.update_attribute(:position, 2)
+      @baz.update_attribute(:position, 3)
+      @qux.update_attribute(:position, 4)
+
+      @qux.move_to(@bar.position)
+
+      reload_items
+
+      expect(Item.ordered).to eq([ @foo, @qux, @bar, @baz ])
+    end
+  end
+
   describe '#move_before' do
     it 'decreases item position' do
       prev_qux_position = @qux.position
