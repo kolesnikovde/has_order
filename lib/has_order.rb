@@ -12,7 +12,7 @@ module HasOrder
       options[:position_column] || :position
     end
 
-    before_create :set_default_position
+    before_save :set_default_position, if: :set_default_position?
 
     if list_scope = options[:scope]
       scope :list_scope, ->(instance) do
@@ -120,6 +120,10 @@ module HasOrder
 
     def set_default_position
       self.position = list_scope.next_position
+    end
+
+    def set_default_position?
+      position.nil?
     end
   end
 end
