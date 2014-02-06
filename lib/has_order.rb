@@ -2,14 +2,16 @@ require 'active_record'
 require 'has_order/version'
 
 module HasOrder
-  SHIFT_INTERVAL = 1000
-
   def has_order options = {}
     extend  ClassMethods
     include InstanceMethods
 
     cattr_accessor :position_column do
       options[:position_column] || :position
+    end
+
+    cattr_accessor :position_shift_interval do
+      options[:shift_interval] || 1000
     end
 
     before_save :set_default_position, if: :set_default_position?
@@ -28,11 +30,11 @@ module HasOrder
 
     def shift!
       col = position_column
-      update_all("#{col} = #{col} + #{SHIFT_INTERVAL}")
+      update_all("#{col} = #{col} + #{position_shift_interval}")
     end
 
     def next_position
-      maximum(position_column).to_i + SHIFT_INTERVAL
+      maximum(position_column).to_i + position_shift_interval
     end
   end
 
