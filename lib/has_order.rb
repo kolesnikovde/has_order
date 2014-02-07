@@ -135,10 +135,10 @@ module HasOrder
 
   def define_list_scope list_scope
     scope :list_scope, case list_scope
-    when nil
-      self
     when Proc
       list_scope
+    when nil
+      ->(model) { self }
     else
       ->(model) { where(Hash[Array(list_scope).map{ |s| [ s, model[s] ] }]) }
     end

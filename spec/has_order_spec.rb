@@ -170,13 +170,29 @@ describe HasOrder do
   end
 
   describe 'scoping' do
-    before(:all) do
-      Item.has_order scope: :category
+    shared_examples 'scoped' do
+      its(:higher)    { should be_empty }
+      its(:and_lower) { should match_array([ @bar, @foo ]) }
     end
 
-    it 'scoped by category' do
-      expect(@foo.higher).to eq([ @bar ])
-      expect(@qux.and_lower.ordered).to eq([ @baz, @qux ])
+    describe 'via attributes' do
+      before(:all) do
+        Item.has_order scope: :category
+      end
+
+      subject { @bar }
+
+      it_behaves_like 'scoped'
+    end
+
+    describe 'via proc' do
+      before(:all) do
+        Item.has_order scope: ->(i){ Item.where(category: i.category) }
+      end
+
+      subject { @bar }
+
+      it_behaves_like 'scoped'
     end
   end
 end
