@@ -16,8 +16,7 @@ And then execute:
 
 ## Usage
 
-    $ rails g migration Item name:string \
-                             position:integer \
+    $ rails g migration CreateItems name:string position:integer
 
 ```ruby
 class Item < ActiveRecord::Base
