@@ -20,7 +20,7 @@ module HasOrder
   end
 
   module ClassMethods
-    def at pos
+    def at(pos)
       where(position_column => pos)
     end
 
@@ -43,7 +43,7 @@ module HasOrder
       self[position_column]
     end
 
-    def position= pos
+    def position=(pos)
       self[position_column] = pos
     end
 
@@ -71,7 +71,7 @@ module HasOrder
       higher.ordered.first
     end
 
-    def move_to pos
+    def move_to(pos)
       ActiveRecord::Base.transaction do
         if node = list_scope.at(pos).first
           node.and_higher.shift!
@@ -82,7 +82,7 @@ module HasOrder
       end
     end
 
-    def move_before node
+    def move_before(node)
       node_pos = node.position
       pos = node_pos > 0 ? node_pos - 1 : node_pos
 
@@ -97,7 +97,7 @@ module HasOrder
       end
     end
 
-    def move_after node
+    def move_after(node)
       node_pos = node.position
       pos = node_pos + 1
 
@@ -117,7 +117,7 @@ module HasOrder
       self.class.list_scope(self)
     end
 
-    def where_position cmp
+    def where_position(cmp)
       col = self.class.arel_table[position_column]
       list_scope.where(col.send(cmp, position))
     end
@@ -133,7 +133,7 @@ module HasOrder
 
   protected
 
-  def define_list_scope list_scope
+  def define_list_scope(list_scope)
     scope :list_scope, case list_scope
     when Proc
       list_scope
