@@ -2,6 +2,9 @@ require 'active_record'
 require 'has_order/version'
 
 module HasOrder
+  # options - :scope           - optional, proc, symbol or an array of symbols.
+  #           :position_column - optional, default 'position'.
+  #           :shift_interval  - optional, default 1000.
   def has_order options = {}
     extend  ClassMethods
     include InstanceMethods
