@@ -93,21 +93,17 @@ describe HasOrder do
   context 'first item' do
     subject { @foo }
 
-    its(:lower) { should be_empty }
-
-    its(:and_lower) { should eq([ subject ]) }
-
-    its(:prev) { should be_nil }
+    it { expect(subject.lower).to be_empty }
+    it { expect(subject.and_lower).to eq([ subject ]) }
+    it { expect(subject.prev).to be_nil }
   end
 
   context 'last item' do
     subject { @qux }
 
-    its(:higher) { should be_empty }
-
-    its(:and_higher) { should eq([ subject ]) }
-
-    its(:next) { should be_nil }
+    it { expect(subject.higher).to be_empty }
+    it { expect(subject.and_higher).to eq([ subject ]) }
+    it { expect(subject.next).to be_nil }
   end
 
   describe '#move_to' do
@@ -171,8 +167,8 @@ describe HasOrder do
 
   describe 'scoping' do
     shared_examples 'scoped' do
-      its(:higher)    { should be_empty }
-      its(:and_lower) { should match_array([ @bar, @foo ]) }
+      it { expect(subject.higher).to be_empty }
+      it { expect(subject.and_lower).to match_array([ @bar, @foo ]) }
     end
 
     describe 'via attributes' do
