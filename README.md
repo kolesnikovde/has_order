@@ -2,7 +2,7 @@
 
 # has_order
 
-Provides tree behavior to active_record models.
+Provides list behavior to active_record models.
 
 ## Installation
 
@@ -32,6 +32,7 @@ foo, bar, baz, qux = Item.create([
 ])
 
 Item.at(foo.position) # => foo
+
 baz.higher            # => [ qux ]
 baz.and_higher        # => [ baz, qux ]
 baz.lower             # => [ foo, bar ]
