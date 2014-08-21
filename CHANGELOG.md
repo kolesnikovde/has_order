@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2
+
+- Added README.md.
+- Updated codestyle.
+- Fixed rspec deprication warnings.
+- Updated development dependencies.
+
 ## 0.1.1
 
 - Fixed scopes (always using lambdas).
