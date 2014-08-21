@@ -16,6 +16,9 @@ And then execute:
 
 ## Usage
 
+    $ rails g migration Item name:string \
+                             position:integer \
+
 ```ruby
 class Item < ActiveRecord::Base
   # :scope           - optional, proc, symbol or an array of symbols.
