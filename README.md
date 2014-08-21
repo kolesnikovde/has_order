@@ -35,6 +35,7 @@ foo, bar, baz, qux = Item.create([
 ])
 
 Item.at(foo.position) # => foo
+Item.ordered          # => [ foo, bar, baz, qux ]
 
 baz.higher            # => [ qux ]
 baz.and_higher        # => [ baz, qux ]
