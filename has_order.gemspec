@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
 
   spec.authors       = ['Kolesnikov Danil']
   spec.email         = ['kolesnikovde@gmail.com']
-  spec.description   = ''
-  spec.summary       = ''
+  spec.description   = 'Ordering behavior for ActiveRecord models and Mongoid documents.'
+  spec.summary       = 'Ordering behavior for ActiveRecord models and Mongoid documents.'
   spec.homepage      = 'https://github.com/kolesnikovde/has_order'
   spec.license       = 'MIT'
 
