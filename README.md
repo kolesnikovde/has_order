@@ -19,13 +19,15 @@ And then execute:
 
 ## Usage
 
-    $ rails g migration CreateItems name:string position:integer
+Example list:
+```sh
+$ rails g model Item \
+  name:string \
+  position:integer # Do not specify default value.
+```
 
 ```ruby
 class Item < ActiveRecord::Base
-  # :scope           - optional, proc, symbol or an array of symbols.
-  # :position_column - optional, default 'position'.
-  # :shift_interval  - optional, default 1000.
   has_order
 end
 
@@ -35,23 +37,36 @@ foo, bar, baz, qux = Item.create([
   { name: 'baz' },
   { name: 'qux' }
 ])
+```
 
+Options:
+```
+scope           - optional, proc, symbol or an array of symbols.
+position_column - optional, default 'position'.
+shift_interval  - optional, default 1000.
+```
+
+Methods:
+```ruby
 Item.at(foo.position) # => foo
 Item.ordered          # => [ foo, bar, baz, qux ]
 
-baz.higher            # => [ qux ]
-baz.and_higher        # => [ baz, qux ]
-baz.lower             # => [ foo, bar ]
-baz.and_lower         # => [ foo, bar, baz ]
+baz.higher     # => [ qux ]
+baz.and_higher # => [ baz, qux ]
+baz.lower      # => [ foo, bar ]
+baz.and_lower  # => [ foo, bar, baz ]
 
 baz.move_before(bar) 
-Item.ordered          # => [ foo, baz, bar, qux ]
+Item.ordered
+# => [ foo, baz, bar, qux ]
 
 foo.move_after(qux)
-Item.ordered          # => [ baz, bar, qux, foo ]
+Item.ordered
+# => [ baz, bar, qux, foo ]
 
 baz.move_to(qux)
-Item.ordered          # => [ bar, baz, qux, foo ]
+Item.ordered
+# => [ bar, baz, qux, foo ]
 ```
 
 ## License
