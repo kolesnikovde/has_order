@@ -2,28 +2,50 @@ require 'has_order/version'
 require 'has_order/orm_adapter'
 
 module HasOrder
-  # options - Options hash.
-  #           :scope           - optional, proc, symbol or an array of symbols.
-  #           :position_column - optional, default 'position'.
-  #           :shift_interval  - optional, default 1000.
-  def has_order options = {}
+  DEFAULT_OPTIONS = {
+    position_column: :position,
+    shift_interval: 1000
+  }
+
+  def has_order(options = {})
     include InstanceMethods
+    extend ClassMethods
 
-    cattr_accessor :position_column do
-      options[:position_column] || :position
-    end
-
-    cattr_accessor :position_shift_interval do
-      options[:shift_interval] || 1000
-    end
+    setup_has_order_options(options)
 
     before_save :set_default_position, if: :set_default_position?
-
-    scope :at, ->(pos){ where(position_column => pos) }
 
     define_list_scope(options[:scope])
 
     include HasOrder::OrmAdapter
+  end
+
+  module ClassMethods
+    def at(pos)
+      where(position_column => pos)
+    end
+
+    protected
+
+    def setup_has_order_options(options)
+      options.assert_valid_keys(:scope, :position_column, :shift_interval)
+
+      options.reverse_merge!(DEFAULT_OPTIONS)
+
+      cattr_accessor(:position_column) { options[:position_column] }
+      cattr_accessor(:position_shift_interval) { options[:shift_interval] }
+    end
+
+    def define_list_scope(list_scope)
+      scope :list_scope, case list_scope
+      when Proc
+        list_scope
+      when nil
+        ->(model) { where(nil) }
+      else
+        ->(model) { where(Hash[Array(list_scope).map{ |s| [ s, model[s] ] }]) }
+      end
+    end
   end
 
   module InstanceMethods
@@ -111,19 +133,6 @@ module HasOrder
 
     def set_default_position?
       position.nil?
-    end
-  end
-
-  protected
-
-  def define_list_scope(list_scope)
-    scope :list_scope, case list_scope
-    when Proc
-      list_scope
-    when nil
-      ->(model) { where(nil) }
-    else
-      ->(model) { where(Hash[Array(list_scope).map{ |s| [ s, model[s] ] }]) }
     end
   end
 end
