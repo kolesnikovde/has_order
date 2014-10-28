@@ -77,6 +77,8 @@ module HasOrder
       lower.ordered.last
     end
 
+    alias_method :previous, :prev
+
     def next
       higher.ordered.first
     end

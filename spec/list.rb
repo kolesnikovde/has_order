@@ -79,6 +79,7 @@ shared_examples 'list' do
   describe '#prev' do
     it 'returns previous item' do
       expect(@baz.prev).to eq(@bar)
+      expect(@baz.previous).to eq(@bar)
     end
   end
 
