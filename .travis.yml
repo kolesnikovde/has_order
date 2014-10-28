@@ -5,6 +5,16 @@ rvm:
   - 2.0.0
   - 2.1.0
 
+env:
+  - HAS_ORDER_ORM=mongoid
+  - HAS_ORDER_ORM=activerecord
+
+matrix:
+  fast_finish: true
+
+services:
+  - mongodb
+
 addons:
   code_climate:
     repo_token: 0ecd8512477ddbf9e06702762f756620b21ff1b7441a8c1dd275265acbefaf66
