@@ -38,6 +38,8 @@ class Item
   include Mongoid::HasOrder
 
   has_order
+
+  field :name, type: String
 end
 ```
 
