@@ -5,7 +5,7 @@
 
 # has_order
 
-Provides list behavior to active_record models.
+Ordering behavior for ActiveRecord models and Mongoid documents.
 
 ## Installation
 
@@ -19,24 +19,26 @@ And then execute:
 
 ## Usage
 
-Example list:
+Example model:
 ```sh
 $ rails g model Item \
   name:string \
   position:integer # Do not specify default value.
 ```
-
 ```ruby
 class Item < ActiveRecord::Base
   has_order
 end
+```
 
-foo, bar, baz, qux = Item.create([
-  { name: 'foo' },
-  { name: 'bar' },
-  { name: 'baz' },
-  { name: 'qux' }
-])
+or Mongoid document:
+```ruby
+class Item
+  include Mongoid::Document
+  include Mongoid::HasOrder
+
+  has_order
+end
 ```
 
 Options:
@@ -48,6 +50,13 @@ shift_interval  - optional, default 1000.
 
 Methods:
 ```ruby
+foo, bar, baz, qux = Item.create([
+  { name: 'foo' },
+  { name: 'bar' },
+  { name: 'baz' },
+  { name: 'qux' }
+])
+
 Item.at(foo.position) # => foo
 Item.ordered          # => [ foo, bar, baz, qux ]
 
@@ -55,8 +64,11 @@ baz.higher     # => [ qux ]
 baz.and_higher # => [ baz, qux ]
 baz.lower      # => [ foo, bar ]
 baz.and_lower  # => [ foo, bar, baz ]
+baz.previous   # => bar
+baz.prev       # => bar
+baz.next       # => qux
 
-baz.move_before(bar) 
+baz.move_before(bar)
 Item.ordered
 # => [ foo, baz, bar, qux ]
 
