@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
 
   spec.authors       = ['Kolesnikov Danil']
   spec.email         = ['kolesnikovde@gmail.com']
-  spec.description   = 'Provides list behavior to active_record models.'
-  spec.summary       = 'Provides list behavior to active_record models.'
+  spec.description   = ''
+  spec.summary       = ''
   spec.homepage      = 'https://github.com/kolesnikovde/has_order'
   spec.license       = 'MIT'
 
@@ -18,12 +18,15 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^spec/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1'
-  spec.add_development_dependency 'rake',    '~> 10'
-  spec.add_development_dependency 'rspec',   '~> 3'
-  spec.add_development_dependency 'sqlite3', '~> 1'
+  spec.add_development_dependency 'bundler',      '~> 1'
+  spec.add_development_dependency 'rake',         '~> 10'
+  spec.add_development_dependency 'rspec',        '~> 3'
+
+  spec.add_development_dependency 'sqlite3',      '~> 1'
+  spec.add_development_dependency 'activerecord', '~> 4'
+  spec.add_development_dependency 'mongoid',      '~> 4'
+
   spec.add_development_dependency 'codeclimate-test-reporter'
 
-  spec.add_runtime_dependency 'activerecord',  '~> 4'
   spec.add_runtime_dependency 'activesupport', '~> 4'
 end
