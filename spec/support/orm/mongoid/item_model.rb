@@ -1,7 +1,6 @@
 class Item
   include Mongoid::Document
-
-  extend HasOrder
+  include Mongoid::HasOrder
 
   field :name,     type: String
   field :category, type: String

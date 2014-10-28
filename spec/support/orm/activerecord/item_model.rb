@@ -9,5 +9,4 @@ ActiveRecord::Schema.define(version: 0) do
 end
 
 class Item < ActiveRecord::Base
-  extend HasOrder
 end

@@ -1,8 +1,20 @@
 module HasOrder
+  # :nocov:
   module OrmAdapter
+    if defined?(::ActiveRecord)
+      ::ActiveRecord::Base.extend(HasOrder)
+    end
+
+    if defined?(::Mongoid)
+      module ::Mongoid::HasOrder
+        def self.included(base)
+          base.extend(::HasOrder)
+        end
+      end
+    end
+
     def self.included(base)
       base.class_eval do
-        # :nocov:
         if defined?(::ActiveRecord) and self < ::ActiveRecord::Base
           require 'has_order/orm_adapter/active_record'
           include ActiveRecord
@@ -10,8 +22,8 @@ module HasOrder
           require 'has_order/orm_adapter/mongoid'
           include Mongoid
         end
-        # :nocov:
       end
     end
   end
+  # :nocov:
 end
