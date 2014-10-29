@@ -7,7 +7,7 @@ rvm:
 
 env:
   - HAS_ORDER_ORM=mongoid
-  - HAS_ORDER_ORM=activerecord
+  - HAS_ORDER_ORM=active_record
 
 matrix:
   fast_finish: true
