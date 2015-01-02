@@ -1,13 +1,10 @@
 module HasOrder
   module OrmAdapter
     module Mongoid
-      def self.included(base)
-        base.class_eval do
-          extend ClassMethods
-          include InstanceMethods
+      extend ActiveSupport::Concern
 
-          field position_column, type: Integer
-        end
+      included do
+        field position_column, type: Integer
       end
 
       module ClassMethods
@@ -28,11 +25,9 @@ module HasOrder
         end
       end
 
-      module InstanceMethods
-        def where_position(cmp)
-          cmp = { gteq: :gte, lteq: :lte }[cmp] || cmp
-          list_scope.where(position_column.send(cmp) => position)
-        end
+      def where_position(cmp)
+        cmp = { gteq: :gte, lteq: :lte }[cmp] || cmp
+        list_scope.where(position_column.send(cmp) => position)
       end
     end
   end

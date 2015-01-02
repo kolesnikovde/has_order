@@ -1,12 +1,7 @@
 module HasOrder
   module OrmAdapter
     module ActiveRecord
-      def self.included(base)
-        base.class_eval do
-          extend ClassMethods
-          include InstanceMethods
-        end
-      end
+      extend ActiveSupport::Concern
 
       module ClassMethods
         def ordered
@@ -23,11 +18,9 @@ module HasOrder
         end
       end
 
-      module InstanceMethods
-        def where_position(cmp)
-          col = self.class.arel_table[position_column]
-          list_scope.where(col.send(cmp, position))
-        end
+      def where_position(cmp)
+        col = self.class.arel_table[position_column]
+        list_scope.where(col.send(cmp, position))
       end
     end
   end
