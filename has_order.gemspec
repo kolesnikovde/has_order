@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
 
   spec.authors       = ['Kolesnikov Danil']
   spec.email         = ['kolesnikovde@gmail.com']
-  spec.description   = 'Ordering behavior for ActiveRecord models and Mongoid documents.'
-  spec.summary       = 'Ordering behavior for ActiveRecord models and Mongoid documents.'
+  spec.description   = 'has_order is an ORM extension that provides user-sorting capabilities.'
+  spec.summary       = 'has_order is an ORM extension that provides user-sorting capabilities.'
   spec.homepage      = 'https://github.com/kolesnikovde/has_order'
   spec.license       = 'MIT'
 
