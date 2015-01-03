@@ -8,10 +8,6 @@ module HasOrder
       end
 
       module ClassMethods
-        def transaction(&blk)
-          yield
-        end
-
         def ordered
           asc(position_column)
         end

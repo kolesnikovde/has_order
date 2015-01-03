@@ -13,7 +13,7 @@ module HasOrder
 
     setup_has_order_options(options)
 
-    before_save :set_default_position, if: :set_default_position?
+    before_save :update_position
 
     define_list_scope(options[:scope])
 
@@ -57,6 +57,19 @@ module HasOrder
       self[position_column] = pos
     end
 
+    def move_to(pos)
+      self.position = pos
+      save!
+    end
+
+    def move_before(node)
+      move_to(node.position)
+    end
+
+    def move_after(node)
+      move_to(node.position + 1)
+    end
+
     def lower
       where_position(:lt)
     end
@@ -83,58 +96,32 @@ module HasOrder
       higher.ordered.first
     end
 
-    def move_to(pos)
-      self.class.transaction do
-        if node = list_scope.at(pos).first
-          node.and_higher.shift(position_interval)
-        end
-
-        self.position = pos
-        save!
-      end
-    end
-
-    def move_before(node)
-      self.class.transaction do
-        node_pos = node.position
-        pos = node_pos > 0 ? node_pos - 1 : node_pos
-
-        if list_scope.at(pos).exists?
-          pos = node_pos
-          node.and_higher.shift(position_interval)
-        end
-
-        self.position = pos
-        save!
-      end
-    end
-
-    def move_after(node)
-      self.class.transaction do
-        node_pos = node.position
-        pos = node_pos + 1
-
-        if list_scope.at(pos).exists?
-          node.higher.shift(position_interval)
-        end
-
-        self.position = pos
-        save!
-      end
-    end
-
     protected
 
-    def list_scope
-      self.class.list_scope(self)
+    def update_position
+      if set_default_position?
+        set_default_position
+      else
+        ensure_position
+      end
+    end
+
+    def set_default_position?
+      position.nil?
     end
 
     def set_default_position
       self.position = list_scope.next_position
     end
 
-    def set_default_position?
-      position.nil?
+    def ensure_position
+      if list_scope.at(position).exists?
+        and_higher.shift(position_interval)
+      end
+    end
+
+    def list_scope
+      self.class.list_scope(self)
     end
   end
 end

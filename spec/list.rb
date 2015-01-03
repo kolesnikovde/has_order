@@ -1,10 +1,10 @@
 shared_examples 'list' do
   before(:each) do
     @foo, @bar, @baz, @qux = described_class.create([
-      { name: 'foo' },
-      { name: 'bar' },
-      { name: 'baz' },
-      { name: 'qux' }
+      { name: 'foo', position: 1 },
+      { name: 'bar', position: 2 },
+      { name: 'baz', position: 3 },
+      { name: 'qux', position: 4 }
     ])
   end
 
@@ -35,12 +35,7 @@ shared_examples 'list' do
 
   describe '.ordered' do
     it 'ranks items according to position' do
-      @foo.update_attribute(:position, 2)
-      @bar.update_attribute(:position, 1)
-      @baz.update_attribute(:position, 4)
-      @qux.update_attribute(:position, 3)
-
-      expect(described_class.ordered).to eq([ @bar, @foo, @qux, @baz ])
+      expect(described_class.ordered).to eq([ @foo, @bar, @baz, @qux ])
     end
   end
 
@@ -107,11 +102,6 @@ shared_examples 'list' do
 
   describe '#move_to' do
     it 'shifts item and higher items when the position is occupied' do
-      @foo.update_attribute(:position, 1)
-      @bar.update_attribute(:position, 2)
-      @baz.update_attribute(:position, 3)
-      @qux.update_attribute(:position, 4)
-
       @qux.move_to(@bar.position)
 
       reload_items
@@ -129,11 +119,6 @@ shared_examples 'list' do
     end
 
     it 'shifts item and higher items when the position is occupied' do
-      @foo.update_attribute(:position, 1)
-      @bar.update_attribute(:position, 2)
-      @baz.update_attribute(:position, 3)
-      @qux.update_attribute(:position, 4)
-
       @baz.move_before(@bar)
 
       reload_items
@@ -151,16 +136,31 @@ shared_examples 'list' do
     end
 
     it 'shifts higher items when the position is occupied' do
-      @foo.update_attribute(:position, 1)
-      @bar.update_attribute(:position, 2)
-      @baz.update_attribute(:position, 3)
-      @qux.update_attribute(:position, 4)
-
       @foo.move_after(@bar)
 
       reload_items
 
       expect(described_class.ordered).to eq([ @bar, @foo, @baz, @qux ])
+    end
+  end
+
+  describe '#save' do
+    it 'shifts higher items when the position is occupied' do
+      @foo.position = @bar.position + 1
+      @foo.save!
+
+      reload_items
+
+      @qux.position = @baz.position
+      @qux.save!
+
+      reload_items
+
+      @quux = described_class.create(name: 'quux', position: 0)
+
+      reload_items
+
+      expect(described_class.ordered).to eq([ @quux, @bar, @foo, @qux, @baz ])
     end
   end
 end
