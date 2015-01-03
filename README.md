@@ -45,9 +45,9 @@ end
 
 Options:
 ```
-scope           - optional, proc, symbol or an array of symbols.
-position_column - optional, default 'position'.
-shift_interval  - optional, default 1000.
+scope             - optional, proc, symbol or an array of symbols.
+position_column   - optional, default 'position'.
+position_interval - optional, default 1000.
 ```
 
 Methods:

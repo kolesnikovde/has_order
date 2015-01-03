@@ -16,12 +16,12 @@ module HasOrder
           asc(position_column)
         end
 
-        def shift!
-          scoped.inc(position_column => position_shift_interval)
+        def shift(interval)
+          scoped.inc(position_column => interval)
         end
 
         def next_position
-          max(position_column).to_i + position_shift_interval
+          max(position_column).to_i + position_interval
         end
       end
 

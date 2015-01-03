@@ -4,7 +4,7 @@ require 'has_order/orm_adapter'
 module HasOrder
   DEFAULT_OPTIONS = {
     position_column: :position,
-    shift_interval: 1000
+    position_interval: 1000
   }
 
   def has_order(options = {})
@@ -28,12 +28,12 @@ module HasOrder
     protected
 
     def setup_has_order_options(options)
-      options.assert_valid_keys(:scope, :position_column, :shift_interval)
+      options.assert_valid_keys(:scope, :position_column, :position_interval)
 
       options.reverse_merge!(DEFAULT_OPTIONS)
 
       cattr_accessor(:position_column) { options[:position_column] }
-      cattr_accessor(:position_shift_interval) { options[:shift_interval] }
+      cattr_accessor(:position_interval) { options[:position_interval] }
     end
 
     def define_list_scope(list_scope)
@@ -86,7 +86,7 @@ module HasOrder
     def move_to(pos)
       self.class.transaction do
         if node = list_scope.at(pos).first
-          node.and_higher.shift!
+          node.and_higher.shift(position_interval)
         end
 
         self.position = pos
@@ -101,7 +101,7 @@ module HasOrder
 
         if list_scope.at(pos).exists?
           pos = node_pos
-          node.and_higher.shift!
+          node.and_higher.shift(position_interval)
         end
 
         self.position = pos
@@ -115,7 +115,7 @@ module HasOrder
         pos = node_pos + 1
 
         if list_scope.at(pos).exists?
-          node.higher.shift!
+          node.higher.shift(position_interval)
         end
 
         self.position = pos
