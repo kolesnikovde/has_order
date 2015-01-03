@@ -5,7 +5,13 @@
 
 # has_order
 
-Ordering behavior for ActiveRecord models and Mongoid documents.
+has_order is an ORM extension that provides user-sorting capabilities.
+
+## Features:
+
+- Optimized to reduce the number of update operations (by using floating intervals between adjacent elements).
+- ActiveRecord 4.x and Mongoid 4.x support.
+- Convenient scope-oriented API.
 
 ## Installation
 
@@ -23,7 +29,7 @@ Example model:
 ```sh
 $ rails g model Item \
   name:string \
-  position:integer # Do not specify default value.
+  position:integer
 ```
 ```ruby
 class Item < ActiveRecord::Base
@@ -39,6 +45,7 @@ class Item
 
   has_order
 
+  # NOTE: position column will be configured automatically.
   field :name, type: String
 end
 ```
@@ -81,29 +88,16 @@ Item.ordered
 baz.move_to(qux)
 Item.ordered
 # => [ bar, baz, qux, foo ]
+
+foo.position = bar.position
+foo.save!
+# => [ foo, bar, baz, qux ]
 ```
+
+## See also
+
+- [ranked-model](https://github.com/mixonic/ranked-model)
 
 ## License
 
-Copyright (c) 2014 Kolesnikov Danil
-
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+MIT License © 2014 Danil Kolesnikov
