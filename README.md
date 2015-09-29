@@ -100,4 +100,4 @@ foo.save!
 
 ## License
 
-MIT License © 2014 Danil Kolesnikov
+MIT
